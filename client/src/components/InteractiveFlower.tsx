@@ -34,7 +34,7 @@ export function InteractiveFlower({ Icon, quote, color, delay = "0s", name }: In
         }`}
         data-testid={`text-quote-${name.toLowerCase()}`}
       >
-        {isRevealed && quote}
+        {quote}
       </div>
     </div>
   );
