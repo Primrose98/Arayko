@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LucideIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface InteractiveFlowerProps {
   Icon: LucideIcon;
@@ -16,13 +17,23 @@ export function InteractiveFlower({ Icon, quote, color, delay = "0s", name }: In
     setIsRevealed(!isRevealed);
   };
 
+  // Add continuous rotation effect
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div className="text-center group">
       <button
         onClick={toggleQuote}
-        className={`text-6xl ${color} hover:scale-110 transition-all duration-300 transform float-animation`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={cn(
+          "text-6xl transition-all duration-700 ease-in-out",
+          color,
+          "hover:scale-110 transform rotate-slow",
+          isHovered ? "paused" : "running"
+        )}
         style={{ animationDelay: delay }}
-        data-testid={`button-flower-${name.toLowerCase()}`}
+        data-testid={`button-icon-${name.toLowerCase()}`}
       >
         <Icon className="w-16 h-16 mx-auto" />
       </button>

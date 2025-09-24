@@ -10,10 +10,9 @@ import { RotatingText } from '@/components/RotatingText';
 import { TraitBadges } from '@/components/TraitBadges';
 import { SectionDivider } from '@/components/SectionDivider';
 import { defaultContent } from '@/shared/content';
-// import { PhotoFrame } from '@/components/PhotoFrame';
-import { NotesRibbon } from '@/components/NotesRibbon';
-import { StickyNote } from '@/components/StickyNote';
-import { FlourishBorder } from '@/components/FlourishBorder';
+import { TeacherPhotos } from '@/components/TeacherPhotos';
+import { MemoriesSection } from '@/components/MemoriesSection';
+import { PresidentsMessage } from '@/components/PresidentsMessage';
 import { 
   Flower, 
   Flower2, 
@@ -44,8 +43,40 @@ export default function Home() {
 
   // No customization: stick to static content
 
+  // Sample photos data - replace with actual photos when available
+  const teacherPhotos = [
+    {
+      src: '/placeholder-teacher-1.jpg',
+      alt: 'Ma\'am Larisa teaching class',
+      caption: 'Inspiring STEM Education',
+      className: 'md:col-span-2',
+      animation: 'animate-slide-left'
+    },
+    {
+      src: '/placeholder-teacher-2.jpg',
+      alt: 'Ma\'am Larisa with students',
+      caption: 'Guiding Future Scientists',
+      className: 'row-span-2',
+      animation: 'animate-float-up-down'
+    },
+    {
+      src: '/placeholder-teacher-3.jpg',
+      alt: 'Classroom moments',
+      caption: 'Engaging Lessons',
+      className: 'lg:col-span-2',
+      animation: 'animate-slide-right'
+    },
+    {
+      src: '/placeholder-teacher-4.jpg',
+      alt: 'Ma\'am Larisa at work',
+      caption: 'Dedicated to Excellence',
+      className: 'md:col-span-2',
+      animation: 'animate-pulse'
+    },
+  ];
+
   return (
-    <div className="min-h-screen theme-roses">
+    <div className="min-h-screen theme-roses overflow-x-hidden">
       <FloatingParticles />
       <FloatingOrbs />
       <MusicPlayer />
@@ -176,8 +207,10 @@ export default function Home() {
 
 
 
-      {/* Photo section removed for now */}
-
+      {/* Teacher Photos Section */}
+      <SectionDivider label="Our Moments Together" className="mt-20" />
+      <MemoriesSection />
+      
       <SectionDivider label="Traits We Love" />
 
       {/* Traits badges to add visual density */}
@@ -189,10 +222,51 @@ export default function Home() {
 
       <SectionDivider label="Interactive" />
 
+      {/* Messages Section */}
+      <section 
+        ref={notesRef}
+        className="py-20 px-6 relative bg-gradient-to-b from-white to-blue-50"
+      >
+        <div className="max-w-6xl mx-auto">
+          <div 
+            className={`section-transition ${notesVisible ? 'visible' : ''}`}
+            data-testid="section-notes"
+          >
+            <h3 className="text-4xl font-script text-primary text-center mb-12">
+              Messages from Your Students
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {content.messages.map((student, index) => (
+                <div 
+                  key={index}
+                  className={`bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1 ${
+                    index % 2 === 0 ? 'rotate-1' : '-rotate-1'
+                  }`}
+                  style={{
+                    backgroundColor: [
+                      'rgba(255, 255, 200, 0.9)',  // Light yellow
+                      'rgba(255, 200, 255, 0.9)',  // Light pink
+                      'rgba(200, 255, 200, 0.9)',  // Light green
+                      'rgba(200, 230, 255, 0.9)'   // Light blue
+                    ][index % 4]
+                  }}
+                >
+                  <p className="text-gray-800 mb-4 italic">"{student.message}"</p>
+                  <p className="text-right font-semibold text-gray-700">— {student.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <SectionDivider label="Interactive" />
+
       {/* Interactive Section */}
       <section 
         ref={interactiveRef}
-        className="min-h-screen flex items-center justify-center px-6 relative"
+        className="py-20 px-6 relative"
       >
         <div className="max-w-6xl mx-auto">
           <div 
@@ -200,7 +274,7 @@ export default function Home() {
             data-testid="section-interactive"
           >
             <h3 className="text-3xl font-script text-primary text-center mb-12">
-              Click the flowers to discover something special
+              Click the icons to discover something special
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
@@ -226,56 +300,34 @@ export default function Home() {
                 name="sparkles"
               />
             </div>
-            <ParallaxGarden className="mt-2" />
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider label="Messages" />
-
-      {/* Class Notes Section */}
-      <section 
-        ref={notesRef}
-        className="min-h-screen flex items-center justify-center px-6 relative"
-      >
-        <div className="max-w-5xl mx-auto">
-          <div 
-            className={`section-transition ${notesVisible ? 'visible' : ''}`}
-            data-testid="section-notes"
-          >
-            <h3 className="text-4xl font-script text-primary text-center mb-12">
-              Messages from Your Students
-            </h3>
-
-            {/* Scrolling ribbon preview */}
-            <div className="mb-8">
-              <NotesRibbon messages={content.messages} />
-            </div>
-
-            <FlourishBorder className="p-8" tone="accent">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {content.messages.map((student, index) => (
-                  <StickyNote
-                    key={student.name}
-                    author={student.name}
-                    message={student.message}
-                    color={["yellow","pink","mint","lavender"][index % 4] as any}
-                    tilt={(index % 2 === 0 ? 'left' : 'right') as any}
-                    className="min-h-32"
-                  />
-                ))}
+            
+            {/* Video Section */}
+            <div className="mt-16 text-center">
+              <h3 className="text-3xl font-script text-primary mb-8">
+                Our Journey Together
+              </h3>
+              <div className="relative pt-[56.25%] w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-2xl bg-black/20">
+                <video 
+                  className="absolute top-0 left-0 w-full h-full object-contain"
+                  controls 
+                  playsInline
+                  preload="metadata"
+                >
+                  <source src="/images/Copy%20of%20STEM%2011%20-%20EINSTEIN.mov" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
-            </FlourishBorder>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="flex items-center justify-center px-6 relative">
-        <div className="max-w-3xl mx-auto w-full">
-          <ElegantCTA />
-        </div>
-      </section>
+      <SectionDivider />
+
+      {/* President's Message */}
+      <PresidentsMessage />
+
+      <SectionDivider />
 
       {/* Closing Section */}
       <section 
@@ -335,7 +387,7 @@ export default function Home() {
                 Your dedication shapes our future, and your kindness touches our hearts.
               </p>
               <p className="text-lg text-muted-foreground font-script">
-                Happy Teacher's Day, Mrs. Johnson! 🌸
+                Happy Teacher's Day, Ma'am Larisa! 🌸
               </p>
             </div>
           </div>
