@@ -1,8 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FloatingParticles } from '@/components/FloatingParticles';
 import { MusicPlayer } from '@/components/MusicPlayer';
 import { InteractiveFlower } from '@/components/InteractiveFlower';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { RotatingText } from '@/components/RotatingText';
+import { TraitBadges } from '@/components/TraitBadges';
+import { SectionDivider } from '@/components/SectionDivider';
+import { defaultContent } from '@/shared/content';
+// import { PhotoFrame } from '@/components/PhotoFrame';
+import { NotesRibbon } from '@/components/NotesRibbon';
+import { ThemeSwitcher, type FlowerTheme } from '@/components/ThemeSwitcher';
 import { 
   Flower, 
   Flower2, 
@@ -12,21 +19,13 @@ import {
   Sprout 
 } from 'lucide-react';
 
-const quotes = [
-  "A teacher takes a hand, opens a mind, and touches a heart.",
-  "Teaching is the profession that creates all other professions.",
-  "The influence of a good teacher can never be erased."
-];
-
-const studentMessages = [
-  { name: "Sarah M.", message: "You make learning fun and exciting!" },
-  { name: "Michael R.", message: "Thank you for believing in me." },
-  { name: "Emma L.", message: "You're the best teacher ever!" },
-  { name: "David K.", message: "Your patience means everything to us." },
-];
+// Use static content file
+const initialContent = defaultContent;
 
 export default function Home() {
   const [welcomeVisible, setWelcomeVisible] = useState(false);
+  const [content] = useState(initialContent);
+  const [theme, setTheme] = useState<FlowerTheme>('roses');
   const { targetRef: appreciationRef, hasIntersected: appreciationVisible } = useIntersectionObserver();
   const { targetRef: interactiveRef, hasIntersected: interactiveVisible } = useIntersectionObserver();
   const { targetRef: notesRef, hasIntersected: notesVisible } = useIntersectionObserver();
@@ -40,8 +39,10 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  // No customization: stick to static content
+
   return (
-    <div className="min-h-screen">
+    <div className={`min-h-screen theme-${theme}`}>
       <FloatingParticles />
       <MusicPlayer />
 
@@ -97,11 +98,13 @@ export default function Home() {
               style={{ animationDelay: "0.5s" }}
               data-testid="text-teacher-name"
             >
-              To Mrs. Johnson
+              To <RotatingText items={[content.teacherName]} className="inline" />
             </p>
           </div>
         </div>
       </section>
+
+      <SectionDivider label="Our Appreciation" />
 
       {/* Appreciation Section */}
       <section 
@@ -125,7 +128,7 @@ export default function Home() {
                 style={{ animationDelay: "4s" }}
                 data-testid="text-sub-message"
               >
-                You inspire us to be better every day.
+                <RotatingText items={content.quotes} intervalMs={5000} />
               </p>
             </div>
 
@@ -142,12 +145,38 @@ export default function Home() {
                 style={{ animationDelay: "8s" }}
                 data-testid="text-signature"
               >
-                With gratitude, from Class 5A
+                With gratitude, from {content.className}
               </p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Theme Switcher only */}
+      <SectionDivider label="Theme" />
+      <section className="flex items-center justify-center px-6">
+        <div className="max-w-5xl mx-auto w-full">
+          <div className="w-full md:w-72 mx-auto flex flex-col items-center gap-4">
+            <div className="w-full rounded-xl border border-border bg-card/80 p-4">
+              <div className="text-sm text-muted-foreground mb-2">Theme</div>
+              <ThemeSwitcher value={theme} onChange={setTheme} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Photo section removed for now */}
+
+      <SectionDivider label="Traits We Love" />
+
+      {/* Traits badges to add visual density */}
+      <section className="flex items-center justify-center px-6">
+        <div className="max-w-4xl mx-auto w-full">
+          <TraitBadges traits={content.traits} className="mb-4" />
+        </div>
+      </section>
+
+      <SectionDivider label="Interactive" />
 
       {/* Interactive Section */}
       <section 
@@ -166,21 +195,21 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <InteractiveFlower
                 Icon={Flower2}
-                quote={quotes[0]}
+                quote={content.quotes[0]}
                 color="text-primary hover:text-primary-foreground"
                 delay="0s"
                 name="flower2"
               />
               <InteractiveFlower
                 Icon={Flower}
-                quote={quotes[1]}
+                quote={content.quotes[1]}
                 color="text-secondary hover:text-secondary-foreground"
                 delay="1s"
                 name="flower"
               />
               <InteractiveFlower
                 Icon={Sparkles}
-                quote={quotes[2]}
+                quote={content.quotes[2]}
                 color="text-accent hover:text-accent-foreground"
                 delay="2s"
                 name="sparkles"
@@ -189,6 +218,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <SectionDivider label="Messages" />
 
       {/* Class Notes Section */}
       <section 
@@ -204,9 +235,14 @@ export default function Home() {
               Messages from Your Students
             </h3>
 
+            {/* Scrolling ribbon preview */}
+            <div className="mb-8">
+              <NotesRibbon messages={content.messages} />
+            </div>
+
             <div className="bg-card/80 backdrop-blur-sm rounded-xl p-8 border border-border shadow-xl">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {studentMessages.map((student, index) => (
+                {content.messages.map((student, index) => (
                   <div 
                     key={student.name}
                     className="bg-background/60 rounded-lg p-4 border border-border"

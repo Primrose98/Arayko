@@ -195,6 +195,19 @@
   animation: float 6s ease-in-out infinite;
 }
 
+/* Theme hues for flowers */
+.theme-roses .text-primary { color: hsl(350 70% 55%); }
+.theme-roses .text-secondary { color: hsl(10 70% 55%); }
+.theme-roses .text-accent { color: hsl(0 65% 50%); }
+
+.theme-sunflowers .text-primary { color: hsl(45 90% 50%); }
+.theme-sunflowers .text-secondary { color: hsl(35 85% 55%); }
+.theme-sunflowers .text-accent { color: hsl(50 90% 45%); }
+
+.theme-cherry .text-primary { color: hsl(330 75% 60%); }
+.theme-cherry .text-secondary { color: hsl(320 75% 55%); }
+.theme-cherry .text-accent { color: hsl(310 75% 50%); }
+
 .drift-animation {
   animation: drift 15s linear infinite;
 }
@@ -217,4 +230,14 @@
 .music-control {
   backdrop-filter: blur(10px);
   background: hsla(330, 20%, 95%, 0.8);
+}
+
+/* Crossfade helpers for rotating text and carousels */
+@keyframes crossfade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.fade-cycle-item {
+  animation: crossfade-in 800ms ease-in-out;
 }
