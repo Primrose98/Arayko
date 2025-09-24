@@ -7,8 +7,8 @@ export type TeacherContent = {
 }
 
 export const defaultContent: TeacherContent = {
-  teacherName: 'Mrs. Johnson',
-  className: 'Class 5A',
+  teacherName: 'Ma\'am Larisa',
+  className: 'STEM11A-EINSTEIN',
   quotes: [
     'A teacher takes a hand, opens a mind, and touches a heart.',
     'Teaching is the profession that creates all other professions.',
@@ -16,14 +16,27 @@ export const defaultContent: TeacherContent = {
     'Education is the key to unlocking the world, a passport to freedom.',
   ],
   messages: [
-    { name: 'Sarah M.', message: 'You make learning fun and exciting!' },
-    { name: 'Michael R.', message: 'Thank you for believing in me.' },
-    { name: 'Emma L.', message: "You're the best teacher ever!" },
-    { name: 'David K.', message: 'Your patience means everything to us.' },
-    { name: 'Noah P.', message: 'Your lessons always brighten our day.' },
-    { name: 'Ava T.', message: 'Thanks for inspiring us to keep trying.' },
+    { name: 'Your Students', message: 'Thank you for being an amazing teacher, Ma\'am Larisa!' },
+    { name: 'STEM11A-EINSTEIN', message: 'We appreciate your dedication and patience with us.' },
+    { name: 'Your Class', message: "Your passion for teaching inspires us every day." },
+    { name: 'Your Students', message: 'Thank you for making learning enjoyable and meaningful.' },
+    { name: 'STEM11A-EINSTEIN', message: 'Your guidance helps us grow and succeed.' },
+    { name: 'Your Class', message: 'We are grateful for your support and encouragement.' },
   ],
-  traits: ['Patient', 'Inspiring', 'Caring', 'Wise', 'Encouraging', 'Creative'],
+  traits: [
+    'Patient', 
+    'Inspiring', 
+    'Caring', 
+    'Knowledgeable', 
+    'Encouraging', 
+    'Passionate',
+    'Dedicated',
+    'Approachable',
+    'Supportive',
+    'Inspiring',
+    'Motivating',
+    'Understanding'
+  ],
 }
 
 

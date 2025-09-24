@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 
-export type FlowerTheme = 'roses' | 'sunflowers' | 'cherry'
+export type FlowerTheme =
+  | 'roses'
+  | 'sunflowers'
+  | 'cherry'
+  | 'lavender'
+  | 'mint'
+  | 'ocean'
+  | 'sunset'
 
 type ThemeSwitcherProps = {
   value: FlowerTheme
@@ -9,9 +16,17 @@ type ThemeSwitcherProps = {
 }
 
 export function ThemeSwitcher({ value, onChange }: ThemeSwitcherProps) {
-  const themes: FlowerTheme[] = ['roses', 'sunflowers', 'cherry']
+  const themes: FlowerTheme[] = [
+    'roses',
+    'sunflowers',
+    'cherry',
+    'lavender',
+    'mint',
+    'ocean',
+    'sunset',
+  ]
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       {themes.map((t) => (
         <Button
           key={t}
