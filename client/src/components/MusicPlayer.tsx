@@ -14,6 +14,7 @@ export function MusicPlayer() {
 
     audio.volume = volume;
     audio.loop = true;
+    audio.muted = isMuted;
     
     // Handle audio end (shouldn't happen with loop, but good fallback)
     const handleEnded = () => setIsPlaying(false);
@@ -22,7 +23,7 @@ export function MusicPlayer() {
     return () => {
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [volume]);
+  }, [volume, isMuted]);
 
   const toggleMusic = async () => {
     const audio = audioRef.current;
@@ -115,14 +116,18 @@ export function MusicPlayer() {
         </div>
       </div>
 
-      {/* Audio element - for when we have an audio file */}
+      {/* Audio element */}
       <audio
         ref={audioRef}
-        preload="metadata"
+        preload="auto"
+        playsInline
         data-testid="background-audio"
       >
-        {/* TODO: Add actual audio source when available */}
-        {/* <source src="/path/to/piano-music.mp3" type="audio/mpeg" /> */}
+        {/* Preferred local source: place file at client/public/audio/teacher_theme.mp3 */}
+        <source src="/audio/teacher_theme.mp3" type="audio/mpeg" />
+        {/* Fallback royalty-free gentle piano loop (CORS-enabled) */}
+        <source src="https://cdn.pixabay.com/download/audio/2021/10/26/audio_7d6a86a9d0.mp3?filename=soothing-piano-ambient-9835.mp3" type="audio/mpeg" />
+        {/* Last-resort tiny silent wav to avoid errors */}
         <source src="data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ4AAAAAAAAAAAAAAAAAAA==" type="audio/wav" />
         Your browser does not support the audio element.
       </audio>
