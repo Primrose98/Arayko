@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FloatingParticles } from '@/components/FloatingParticles';
 import { MusicPlayer } from '@/components/MusicPlayer';
+import { FloatingOrbs } from '@/components/FloatingOrbs';
+import { ParallaxGarden } from '@/components/ParallaxGarden';
+import { ElegantCTA } from '@/components/ElegantCTA';
 import { InteractiveFlower } from '@/components/InteractiveFlower';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { RotatingText } from '@/components/RotatingText';
@@ -9,7 +12,8 @@ import { SectionDivider } from '@/components/SectionDivider';
 import { defaultContent } from '@/shared/content';
 // import { PhotoFrame } from '@/components/PhotoFrame';
 import { NotesRibbon } from '@/components/NotesRibbon';
-import { ThemeSwitcher, type FlowerTheme } from '@/components/ThemeSwitcher';
+import { StickyNote } from '@/components/StickyNote';
+import { FlourishBorder } from '@/components/FlourishBorder';
 import { 
   Flower, 
   Flower2, 
@@ -25,7 +29,6 @@ const initialContent = defaultContent;
 export default function Home() {
   const [welcomeVisible, setWelcomeVisible] = useState(false);
   const [content] = useState(initialContent);
-  const [theme, setTheme] = useState<FlowerTheme>('roses');
   const { targetRef: appreciationRef, hasIntersected: appreciationVisible } = useIntersectionObserver();
   const { targetRef: interactiveRef, hasIntersected: interactiveVisible } = useIntersectionObserver();
   const { targetRef: notesRef, hasIntersected: notesVisible } = useIntersectionObserver();
@@ -42,64 +45,83 @@ export default function Home() {
   // No customization: stick to static content
 
   return (
-    <div className={`min-h-screen theme-${theme}`}>
+    <div className="min-h-screen theme-roses">
       <FloatingParticles />
+      <FloatingOrbs />
       <MusicPlayer />
 
       {/* Welcome Section */}
-      <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <div className="text-center z-10">
-          {/* Blooming Flowers Animation */}
-          <div className="relative mb-12">
-            <div 
-              className="absolute -top-12 -left-12 text-6xl text-primary bloom-animation" 
-              style={{ animationDelay: "0.5s" }}
-            >
+      <section className="min-h-screen flex items-center justify-center relative overflow-hidden p-6">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-primary/10 blur-3xl animate-pulse" style={{ animationDuration: '8s' }}></div>
+          <div className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-secondary/10 blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }}></div>
+          <div className="absolute top-1/3 right-1/3 w-24 h-24 rounded-full bg-accent/10 blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '1s' }}></div>
+        </div>
+        
+        <div className="text-center z-10 max-w-4xl mx-auto">
+          <div className="greeting-container">
+            {/* Decorative Elements */}
+            <div className="absolute -top-16 -left-16 text-6xl text-primary gentle-float" style={{ animationDelay: '0.5s' }}>
               <Flower className="w-16 h-16" />
             </div>
-            <div 
-              className="absolute -top-8 -right-16 text-5xl text-secondary bloom-animation" 
-              style={{ animationDelay: "1s" }}
-            >
+            <div className="absolute -top-12 -right-20 text-5xl text-secondary gentle-float" style={{ animationDelay: '1s' }}>
               <Flower2 className="w-14 h-14" />
             </div>
-            <div 
-              className="absolute -bottom-8 -left-8 text-4xl text-accent bloom-animation" 
-              style={{ animationDelay: "1.5s" }}
-            >
+            <div className="absolute bottom-20 -left-12 text-4xl text-accent gentle-float" style={{ animationDelay: '1.5s' }}>
               <Flower className="w-12 h-12" />
             </div>
-            <div 
-              className="absolute -bottom-12 -right-8 text-5xl text-primary bloom-animation" 
-              style={{ animationDelay: "2s" }}
-            >
+            <div className="absolute -bottom-16 -right-12 text-5xl text-primary gentle-float" style={{ animationDelay: '2s' }}>
               <Sprout className="w-14 h-14" />
             </div>
             
-            {/* Central Flower Bouquet */}
+            {/* Central Content */}
             <div 
-              className="text-8xl text-primary bloom-animation" 
-              style={{ animationDelay: "2.5s" }}
+              className={`section-transition ${welcomeVisible ? 'visible' : ''} relative z-10`}
+              data-testid="section-welcome"
             >
-              <Sparkles className="w-24 h-24 mx-auto" />
+              <div className="mb-8">
+                <div className="text-5xl md:text-7xl font-script text-secondary mb-2">
+                  Hello, Teacher!
+                </div>
+                <div className="w-24 h-1 bg-primary/30 mx-auto my-4 rounded-full"></div>
+                <h1 className="text-6xl md:text-8xl font-script font-bold text-primary text-glow mb-6">
+                  Happy Teacher's Day!
+                </h1>
+                <div className="w-16 h-1 bg-secondary/30 mx-auto my-4 rounded-full"></div>
+                <div className="text-2xl md:text-3xl font-script text-foreground/80 mb-8">
+                  Celebrating you today and always
+                </div>
+              </div>
+              
+              <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 border border-border/50 shadow-xl max-w-2xl mx-auto">
+                <p 
+                  className="text-2xl md:text-3xl font-script text-foreground mb-6 subtle-pulse"
+                  data-testid="text-teacher-name"
+                >
+                  To <span className="text-primary font-bold"><RotatingText items={[content.teacherName]} className="inline" /></span>
+                </p>
+                <p className="text-lg text-muted-foreground mb-4">
+                  Your dedication and passion light up our learning journey
+                </p>
+                <div className="flex justify-center space-x-4 mt-6">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="w-2 h-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: `${i * 0.2}s` }}></div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="mt-12 flex justify-center space-x-4">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Heart className="w-4 h-4 text-primary" />
+                </div>
+                <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+                  <Leaf className="w-4 h-4 text-secondary" />
+                </div>
+                <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-accent" />
+                </div>
+              </div>
             </div>
-          </div>
-
-          {/* Welcome Message */}
-          <div 
-            className={`section-transition ${welcomeVisible ? 'visible' : ''}`}
-            data-testid="section-welcome"
-          >
-            <h1 className="text-6xl md:text-8xl font-script font-bold text-primary mb-6 float-animation">
-              Happy Teacher's Day!
-            </h1>
-            <p 
-              className="text-2xl md:text-3xl font-script text-primary-foreground float-animation" 
-              style={{ animationDelay: "0.5s" }}
-              data-testid="text-teacher-name"
-            >
-              To <RotatingText items={[content.teacherName]} className="inline" />
-            </p>
           </div>
         </div>
       </section>
@@ -152,18 +174,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Theme Switcher only */}
-      <SectionDivider label="Theme" />
-      <section className="flex items-center justify-center px-6">
-        <div className="max-w-5xl mx-auto w-full">
-          <div className="w-full md:w-72 mx-auto flex flex-col items-center gap-4">
-            <div className="w-full rounded-xl border border-border bg-card/80 p-4">
-              <div className="text-sm text-muted-foreground mb-2">Theme</div>
-              <ThemeSwitcher value={theme} onChange={setTheme} />
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Photo section removed for now */}
 
@@ -192,7 +203,7 @@ export default function Home() {
               Click the flowers to discover something special
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
               <InteractiveFlower
                 Icon={Flower2}
                 quote={content.quotes[0]}
@@ -215,6 +226,7 @@ export default function Home() {
                 name="sparkles"
               />
             </div>
+            <ParallaxGarden className="mt-2" />
           </div>
         </div>
       </section>
@@ -240,23 +252,28 @@ export default function Home() {
               <NotesRibbon messages={content.messages} />
             </div>
 
-            <div className="bg-card/80 backdrop-blur-sm rounded-xl p-8 border border-border shadow-xl">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FlourishBorder className="p-8" tone="accent">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {content.messages.map((student, index) => (
-                  <div 
+                  <StickyNote
                     key={student.name}
-                    className="bg-background/60 rounded-lg p-4 border border-border"
-                    data-testid={`card-student-${index}`}
-                  >
-                    <p className="text-sm font-medium text-muted-foreground mb-2">
-                      {student.name}
-                    </p>
-                    <p className="text-foreground">"{student.message}"</p>
-                  </div>
+                    author={student.name}
+                    message={student.message}
+                    color={["yellow","pink","mint","lavender"][index % 4] as any}
+                    tilt={(index % 2 === 0 ? 'left' : 'right') as any}
+                    className="min-h-32"
+                  />
                 ))}
               </div>
-            </div>
+            </FlourishBorder>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="flex items-center justify-center px-6 relative">
+        <div className="max-w-3xl mx-auto w-full">
+          <ElegantCTA />
         </div>
       </section>
 
