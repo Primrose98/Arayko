@@ -313,7 +313,7 @@ export default function Home() {
                   playsInline
                   preload="metadata"
                 >
-                  <source src="/images/Copy%20of%20STEM%2011%20-%20EINSTEIN.mov" type="video/mp4" />
+                  <source src="/images/Copy%20of%20STEM%2011%20-%20EINSTEIN.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
