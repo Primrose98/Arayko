@@ -26,7 +26,10 @@ export function TeacherPhotos({ photos, className }: TeacherPhotosProps) {
       // Prevent background scroll when lightbox is open
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
-      return () => window.removeEventListener('keydown', onKeyDown);
+      return () => {
+        window.removeEventListener('keydown', onKeyDown);
+        document.body.style.overflow = originalOverflow;
+      };
     }
   }, [activeIndex]);
 
@@ -54,6 +57,9 @@ export function TeacherPhotos({ photos, className }: TeacherPhotosProps) {
               alt={photo.alt} 
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
+              decoding="async"
+              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+              fetchpriority="low"
             />
             {photo.caption && (
               <div className="photo-caption">
@@ -69,14 +75,14 @@ export function TeacherPhotos({ photos, className }: TeacherPhotosProps) {
 
       {activeIndex !== null && (
         <div 
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 md:p-6"
           onClick={() => setActiveIndex(null)}
           aria-modal="true"
           role="dialog"
         >
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
             <button 
-              className="px-3 py-1 rounded-md bg-white/10 text-white hover:bg-white/20 transition"
+              className="px-3 py-2 sm:px-3 sm:py-1 rounded-md bg-white/10 text-white hover:bg-white/20 transition text-lg sm:text-base"
               onClick={(e) => { e.stopPropagation(); setActiveIndex(null); }}
               aria-label="Close"
             >
@@ -87,10 +93,10 @@ export function TeacherPhotos({ photos, className }: TeacherPhotosProps) {
             <img
               src={photos[activeIndex].src}
               alt={photos[activeIndex].alt}
-              className="max-h-[90vh] max-w-[95vw] w-auto h-auto object-contain rounded-lg shadow-xl"
+              className="max-h-[88vh] sm:max-h-[90vh] max-w-[96vw] sm:max-w-[95vw] w-auto h-auto object-contain rounded-md sm:rounded-lg shadow-xl"
             />
             {photos[activeIndex].caption && (
-              <div className="absolute bottom-6 left-0 right-0 text-center text-white/90 px-4">
+              <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 text-center text-white/90 px-3 sm:px-4">
                 <span className="text-sm">{photos[activeIndex].caption}</span>
               </div>
             )}
