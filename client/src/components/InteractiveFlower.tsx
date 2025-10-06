@@ -27,7 +27,7 @@ export function InteractiveFlower({ Icon, quote, color, delay = "0s", name }: In
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          "text-6xl transition-all duration-700 ease-in-out",
+          "text-5xl sm:text-6xl transition-all duration-700 ease-in-out",
           color,
           "hover:scale-110 transform rotate-slow",
           isHovered ? "paused" : "running"
@@ -35,10 +35,10 @@ export function InteractiveFlower({ Icon, quote, color, delay = "0s", name }: In
         style={{ animationDelay: delay }}
         data-testid={`button-icon-${name.toLowerCase()}`}
       >
-        <Icon className="w-16 h-16 mx-auto" />
+        <Icon className="w-12 h-12 sm:w-16 sm:h-16 mx-auto" />
       </button>
       <div
-        className={`mt-4 text-lg font-medium text-foreground bg-card/90 backdrop-blur-sm rounded-lg p-4 border border-border shadow-lg transition-all duration-500 ${
+        className={`mt-4 text-base sm:text-lg font-medium text-foreground bg-card/90 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-border shadow-lg transition-all duration-500 ${
           isRevealed 
             ? 'opacity-100 transform translate-y-0' 
             : 'opacity-0 transform translate-y-5'

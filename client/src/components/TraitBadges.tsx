@@ -37,14 +37,14 @@ export function TraitBadges({ traits, className }: TraitBadgesProps) {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-3/4 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
         </div>
-        <div className="relative flex justify-center mb-10">
-          <span className="px-6 py-2 bg-white text-2xl font-script text-primary shadow-lg rounded-full border border-primary/20">
+        <div className="relative flex justify-center mb-8 sm:mb-10">
+          <span className="px-4 sm:px-6 py-2 bg-white text-xl sm:text-2xl font-script text-primary shadow-lg rounded-full border border-primary/20">
             Traits We Love About You
           </span>
         </div>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
         {traits.map((trait, index) => {
           const colorIndex = index % colors.length;
           const iconIndex = index % traitIcons.length;
@@ -52,14 +52,14 @@ export function TraitBadges({ traits, className }: TraitBadgesProps) {
           return (
             <div 
               key={trait}
-              className={`relative p-4 rounded-xl border-2 ${colors[colorIndex]} transform transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-start space-x-2`}
+              className={`relative p-3 sm:p-4 rounded-xl border-2 ${colors[colorIndex]} transform transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-start space-x-2`}
             >
               <div className="mt-0.5">
                 {React.cloneElement(traitIcons[iconIndex], {
-                  className: `${colors[colorIndex].replace('text-', 'text-').split(' ')[0].replace('800', '600')} w-5 h-5`
+                  className: `${colors[colorIndex].replace('text-', 'text-').split(' ')[0].replace('800', '600')} w-4 h-4 sm:w-5 sm:h-5`
                 })}
               </div>
-              <span className="font-medium">{trait}</span>
+              <span className="font-medium text-sm sm:text-base">{trait}</span>
               
               {/* Decorative elements */}
               <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-white/80 flex items-center justify-center shadow-sm">
@@ -81,8 +81,8 @@ export function TraitBadges({ traits, className }: TraitBadgesProps) {
         <div className="absolute -top-6 right-1/4 w-4 h-4 rounded-full bg-purple-300/80 animate-bounce" style={{ animationDelay: '0.6s' }}></div>
       </div>
       
-      <div className="mt-16 text-center">
-        <p className="text-lg text-muted-foreground italic">
+      <div className="mt-12 sm:mt-16 text-center">
+        <p className="text-base sm:text-lg text-muted-foreground italic">
           You make a difference every day with your kindness and dedication.
         </p>
       </div>
