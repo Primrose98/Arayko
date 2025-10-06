@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface Photo {
@@ -15,38 +15,89 @@ interface TeacherPhotosProps {
 }
 
 export function TeacherPhotos({ photos, className }: TeacherPhotosProps) {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') setActiveIndex(null);
+    }
+    if (activeIndex !== null) {
+      window.addEventListener('keydown', onKeyDown);
+      // Prevent background scroll when lightbox is open
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => window.removeEventListener('keydown', onKeyDown);
+    }
+  }, [activeIndex]);
+
   return (
-    <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-12", className)}>
-      {photos.map((photo, index) => (
+    <>
+      <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-12", className)}>
+        {photos.map((photo, index) => (
+          <div 
+            key={index} 
+            className={cn(
+              "photo-frame group relative overflow-hidden rounded-xl shadow-lg cursor-zoom-in",
+              photo.animation || "animate-float-up-down",
+              photo.className
+            )}
+            style={{
+              animationDelay: `${index * 0.2}s`,
+              animationDuration: index % 2 === 0 ? '6s' : '8s'
+            }}
+            onClick={() => setActiveIndex(index)}
+            role="button"
+            aria-label="Open image"
+          >
+            <img 
+              src={photo.src} 
+              alt={photo.alt} 
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            {photo.caption && (
+              <div className="photo-caption">
+                <p className="text-sm font-medium">{photo.caption}</p>
+              </div>
+            )}
+            {/* Decorative elements */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 via-secondary/5 to-accent/10 rounded-2xl -z-10 group-hover:opacity-100 opacity-0 transition-opacity duration-500" />
+          </div>
+        ))}
+      </div>
+
+      {activeIndex !== null && (
         <div 
-          key={index} 
-          className={cn(
-            "photo-frame group relative overflow-hidden rounded-xl shadow-lg",
-            photo.animation || "animate-float-up-down",
-            photo.className
-          )}
-          style={{
-            animationDelay: `${index * 0.2}s`,
-            animationDuration: index % 2 === 0 ? '6s' : '8s'
-          }}
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setActiveIndex(null)}
+          aria-modal="true"
+          role="dialog"
         >
-          <img 
-            src={photo.src} 
-            alt={photo.alt} 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
-          {photo.caption && (
-            <div className="photo-caption">
-              <p className="text-sm font-medium">{photo.caption}</p>
-            </div>
-          )}
-          {/* Decorative elements */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 via-secondary/5 to-accent/10 rounded-2xl -z-10 group-hover:opacity-100 opacity-0 transition-opacity duration-500" />
+          <div className="absolute top-4 right-4">
+            <button 
+              className="px-3 py-1 rounded-md bg-white/10 text-white hover:bg-white/20 transition"
+              onClick={(e) => { e.stopPropagation(); setActiveIndex(null); }}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={photos[activeIndex].src}
+              alt={photos[activeIndex].alt}
+              className="max-h-[90vh] max-w-[95vw] w-auto h-auto object-contain rounded-lg shadow-xl"
+            />
+            {photos[activeIndex].caption && (
+              <div className="absolute bottom-6 left-0 right-0 text-center text-white/90 px-4">
+                <span className="text-sm">{photos[activeIndex].caption}</span>
+              </div>
+            )}
+          </div>
         </div>
-      ))}
-    </div>
+      )}
+    </>
   );
 }
 
